@@ -1,5 +1,5 @@
 {
-  "name": "nativescript-photo-editor",
+  "name": "nativescript-photo-editor-with-fixed-textfield",
   "version": "1.1.0",
   "description": "A NativeScript plugin for editing your photos (crop, draw, add text, etc.)",
   "main": "photo-editor",
