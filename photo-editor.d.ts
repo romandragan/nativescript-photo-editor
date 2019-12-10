@@ -25,6 +25,7 @@ export const enum PhotoEditorControl {
 export interface EditPhotoOptions {
     imageSource: ImageSource;
     hiddenControls?: PhotoEditorControl[];
+    hostView?: any;
 }
 
 export class PhotoEditor {

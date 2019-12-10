@@ -63,7 +63,10 @@ export class PhotoEditor implements PhotoEditorBase {
             viewController.hiddenControls = nativeHiddenControls as any;
             viewController.photoEditorDelegate = this._delegate;
 
-            frame.topmost().ios.controller.presentViewControllerAnimatedCompletion(viewController, true, null);
+            (options.hostView
+                ? options.hostView.viewController
+                : frame.topmost().ios.controller
+            ).presentViewControllerAnimatedCompletion(viewController, true, null);
         });
     }
 }
