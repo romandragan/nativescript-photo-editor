@@ -6,8 +6,9 @@
         "experimentalDecorators": true,
         "noLib": false,
         "sourceMap": false,
-        "target": "es5",
-        "module": "commonjs",
+        "target": "ES2017",
+        "module": "esnext",
+        "moduleResolution": "node",
         "outDir": "bin/dist",
         "lib": [
             "es6",
@@ -17,10 +18,13 @@
         "baseUrl": ".",
         "paths": {
             "*": [
-                "./node_modules/tns-core-modules/*",
                 "./node_modules/*"
             ]
-        }
+        },
+        "plugins": [{
+            "transform": "@nativescript/webpack/transformers/ns-transform-native-classes",
+            "type": "raw"
+        }]
     }, 
     "exclude": [
         "node_modules", 

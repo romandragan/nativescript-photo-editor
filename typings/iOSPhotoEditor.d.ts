@@ -1,4 +1,4 @@
-
+@NativeClass()
 declare class CropView extends UIView implements UIGestureRecognizerDelegate, UIScrollViewDelegate {
 
 	static alloc(): CropView; // inherited from NSObject
@@ -92,6 +92,7 @@ declare class CropView extends UIView implements UIGestureRecognizerDelegate, UI
 	viewForZoomingInScrollView(scrollView: UIScrollView): UIView;
 }
 
+@NativeClass()
 declare class CropViewController extends UIViewController {
 
 	static alloc(): CropViewController; // inherited from NSObject
@@ -110,6 +111,7 @@ declare var PhotoEditorDelegate: {
 	prototype: PhotoEditorDelegate;
 };
 
+@NativeClass()
 declare class PhotoEditorViewController extends UIViewController implements UIGestureRecognizerDelegate, UITextViewDelegate {
 
 	static alloc(): PhotoEditorViewController; // inherited from NSObject

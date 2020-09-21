@@ -10,9 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
-import * as application from "application";
-import { path, knownFolders, File } from "file-system";
-import { ImageSource, fromFile } from "image-source";
+import { Application, AndroidActivityResultEventData, path, knownFolders, File, ImageSource } from "@nativescript/core";
 
 import { EditPhotoOptions, PhotoEditor as PhotoEditorBase, PhotoEditorControl } from ".";
 
@@ -28,7 +26,7 @@ export class PhotoEditor implements PhotoEditorBase {
     public editPhoto(options: EditPhotoOptions) {
         options.hiddenControls = options.hiddenControls || [];
 
-        application.android.on("activityResult", this.onActivityResult);
+        Application.android.on("activityResult", this.onActivityResult);
 
         return new Promise<ImageSource>((resolve, reject) => {
             this._currentResolve = resolve;
@@ -37,25 +35,25 @@ export class PhotoEditor implements PhotoEditorBase {
 
             options.imageSource.saveToFile(this._sourceTempFilePath, "jpg");
             
-            const intent = new android.content.Intent(application.android.foregroundActivity, com.tangrainc.photoeditor.PhotoEditorActivity.class);
+            const intent = new android.content.Intent(Application.android.foregroundActivity, com.tangrainc.photoeditor.PhotoEditorActivity.class);
             intent.putExtra("selectedImagePath", this._sourceTempFilePath);
             intent.putExtra("isCropIn", options.hiddenControls.indexOf(PhotoEditorControl.Crop) === -1);
             intent.putExtra("isDrawIn", options.hiddenControls.indexOf(PhotoEditorControl.Draw) === -1);
             intent.putExtra("isTextIn", options.hiddenControls.indexOf(PhotoEditorControl.Text) === -1);
             intent.putExtra("isSaveIn", false);
             intent.putExtra("isClearIn", options.hiddenControls.indexOf(PhotoEditorControl.Clear) === -1);
-            application.android.foregroundActivity.startActivityForResult(intent, PhotoEditor.EDIT_PHOTO_REQUEST);    
+            Application.android.foregroundActivity.startActivityForResult(intent, PhotoEditor.EDIT_PHOTO_REQUEST);    
         });
     }
 
     // NOTE: Intentionally using lambda function we get a "good" this!
-    private onActivityResult = (args: application.AndroidActivityResultEventData) => {
+    private onActivityResult = async (args: AndroidActivityResultEventData) => {
         if (args.requestCode === PhotoEditor.EDIT_PHOTO_REQUEST) {
             switch (args.resultCode) {
                 case android.app.Activity.RESULT_OK:
                     const resultIntent: android.content.Intent = args.intent;
                     const imagePath = resultIntent.getExtras().getString("imagePath");
-                    const imageSource = fromFile(imagePath);
+                    const imageSource = await ImageSource.fromFile(imagePath);
 
                     // Cleanup target temp file
                     File.fromPath(imagePath).removeSync();
@@ -81,7 +79,7 @@ export class PhotoEditor implements PhotoEditorBase {
             this._sourceTempFilePath = undefined;
             this._currentResolve = undefined;
             this._currentReject = undefined;
-            application.android.off("activityResult", this.onActivityResult);
+            Application.android.off("activityResult", this.onActivityResult);
         }
     }
 }
